@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+BASEDIR=#{scope.lookupvar('ssh::params::sh_tmp_dir')}/authorized_keys.d/fragment
+
+for USER in `ls -R ${BASEDIR}` | xargs -n1 basename | awk '{split($0,array,'-') {print array[1]}' | sort | uniq`
+do
+  OUTPUT=#{scope.lookupvar('ssh::params::sh_tmp_dir')}/authorized_keys.d/${USER}
+  cat ${BASEDIR}/${USER}-* > ${OUTPUT}
+done
