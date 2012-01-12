@@ -40,9 +40,9 @@ SyslogFacility AUTHPRIV
 #StrictModes yes
 #MaxAuthTries 6
 
-#RSAAuthentication yes
-#PubkeyAuthentication yes
-#AuthorizedKeysFile	.ssh/authorized_keys
+RSAAuthentication yes
+PubkeyAuthentication yes
+AuthorizedKeysFile	.ssh/authorized_keys
 
 # For this to work you will also need host keys in /etc/ssh/ssh_known_hosts
 #RhostsRSAAuthentication no
@@ -98,7 +98,7 @@ X11Forwarding yes
 #X11UseLocalhost yes
 #PrintMotd yes
 #PrintLastLog yes
-#TCPKeepAlive yes
+TCPKeepAlive yes
 #UseLogin no
 #UsePrivilegeSeparation yes
 #PermitUserEnvironment no
@@ -106,7 +106,7 @@ X11Forwarding yes
 #ClientAliveInterval 0
 #ClientAliveCountMax 3
 #ShowPatchLevel no
-#UseDNS yes
+UseDNS no
 #PidFile /var/run/sshd.pid
 #MaxStartups 10
 #PermitTunnel no
