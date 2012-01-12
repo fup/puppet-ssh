@@ -12,23 +12,23 @@ class ssh(
   else { $REAL_client = $client }
 
   anchor { 'ssh::begin': }
-  -> anchor { 'ssh::server::begin': }
-  -> anchor { 'ssh::server::end': }
-  -> anchor { 'ssh::client::begin': }
-  -> anchor { 'ssh::client::end': }
+  -> anchor { 'ssh::server_init::begin': }
+  -> anchor { 'ssh::server_init::end': }
+  -> anchor { 'ssh::client_init::begin': }
+  -> anchor { 'ssh::client_init::end': }
   -> anchor { 'ssh::end': }
 
   if $server == 'true' {
     class { 'ssh::server':
-      require => Anchor['ssh::server::begin'],
-      before  => Anchor['ssh::server::end'],
+      require => Anchor['ssh::server_init::begin'],
+      before  => Anchor['ssh::server_init::end'],
     }
   }
 
   if $client == 'true' {
     class { 'ssh::client': 
-      require => Anchor['ssh::client::begin'],
-      before  => Anchor['ssh::client::end'],
+      require => Anchor['ssh::client_init::begin'],
+      before  => Anchor['ssh::client_init::end'],
     }
   }
 }
