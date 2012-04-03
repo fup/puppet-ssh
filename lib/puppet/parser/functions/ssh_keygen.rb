@@ -1,6 +1,7 @@
 module Puppet::Parser::Functions
   newfunction(:ssh_keygen, :type => :rvalue) do |args|
-    request = args[1].to_sym
+    args[1].nil? ? request = :public : request = args[1].to_sym
+
     config = {
       :ssh_dir      => 'ssl/ssh_keys',
       :ssh_comment  => args[0],
@@ -11,7 +12,7 @@ module Puppet::Parser::Functions
     File.directory?('/etc/puppetlabs/puppet') ? config[:basedir] = '/etc/puppetlabs/puppet' : config[:basedir] = '/etc/puppet'
 
     # Error Handling
-    unless args.length > 1 then
+    unless args.length >= 1 then
       raise Puppet::ParseError, "ssh_keygen(): wrong number of arguments (#{args.length}; must be > 1)"
     end
 
@@ -32,6 +33,10 @@ module Puppet::Parser::Functions
     begin
       unless File.exists?("#{config[:basedir]}/#{config[:ssh_dir]}/#{config[:ssh_comment]}") then
         %x[/usr/bin/ssh-keygen -t #{config[:ssh_key_type]} -P '' -f #{config[:basedir]}/#{config[:ssh_dir]}/#{config[:ssh_comment]}]
+        File.chmod(0600,
+          "#{config[:basedir]}/#{config[:ssh_dir]}/#{config[:ssh_comment]}",
+          "#{config[:basedir]}/#{config[:ssh_dir]}/#{config[:ssh_comment]}.pub"
+        )
       end
     rescue => e
       raise Puppet::ParseError, "ssh_keygen(): Unable to generate ssh key (#{e})"
@@ -39,7 +44,7 @@ module Puppet::Parser::Functions
 
     # Return content based on request
     begin
-      case config[:ssh_key_type]
+      case request
       when :private
         return File.open("#{config[:basedir]}/#{config[:ssh_dir]}/#{config[:ssh_comment]}").read
       else
@@ -47,7 +52,7 @@ module Puppet::Parser::Functions
         return pub_key.scan(/^.* (.*) .*$/)[0][0]
       end
     rescue => e
-      raise Puppet::ParseError, "ssh_keygen(): Unable to read ssh #{config[:ssh_key_type]} key (#{e})"
+      raise Puppet::ParseError, "ssh_keygen(): Unable to read ssh #{request.to_s} key (#{e})"
     end
   end
 end
