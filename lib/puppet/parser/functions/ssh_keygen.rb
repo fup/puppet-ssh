@@ -3,7 +3,7 @@ module Puppet::Parser::Functions
     args[1].nil? ? request = :public : request = args[1].to_sym
 
     config = {
-      :ssh_dir      => 'ssl/ssh_keys',
+      :ssh_dir      => 'ssh',
       :ssh_comment  => args[0],
       :ssh_key_type => 'dsa',
 
