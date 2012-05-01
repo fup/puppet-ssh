@@ -33,10 +33,6 @@ module Puppet::Parser::Functions
     begin
       unless File.exists?("#{config[:basedir]}/#{config[:ssh_dir]}/#{config[:ssh_comment]}") then
         %x[/usr/bin/ssh-keygen -t #{config[:ssh_key_type]} -P '' -f #{config[:basedir]}/#{config[:ssh_dir]}/#{config[:ssh_comment]}]
-        File.chmod(0600,
-          "#{config[:basedir]}/#{config[:ssh_dir]}/#{config[:ssh_comment]}",
-          "#{config[:basedir]}/#{config[:ssh_dir]}/#{config[:ssh_comment]}.pub"
-        )
       end
     rescue => e
       raise Puppet::ParseError, "ssh_keygen(): Unable to generate ssh key (#{e})"
