@@ -4,7 +4,7 @@ module Puppet::Parser::Functions
 
     config = {
       :ssh_dir      => 'ssh',
-      :ssh_comment  => args[0],
+      :ssh_comment  => args[0].chomp,
       :ssh_key_type => 'dsa',
 
     }
