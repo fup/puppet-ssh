@@ -38,7 +38,7 @@ module Puppet::Parser::Functions
       raise Puppet::ParseError, "ssh_keygen(): Unable to generate ssh key (#{e})"
     end
 
-    # Return content based on request
+    # Return ssh key content based on request
     begin
       case request
       when :private
