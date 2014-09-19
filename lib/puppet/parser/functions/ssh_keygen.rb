@@ -33,6 +33,10 @@ module Puppet::Parser::Functions
     begin
       unless File.exists?("#{config[:basedir]}/#{config[:ssh_dir]}/#{config[:ssh_comment]}") then
         %x[/usr/bin/ssh-keygen -t #{config[:ssh_key_type]} -P '' -f #{config[:basedir]}/#{config[:ssh_dir]}/#{config[:ssh_comment]}]
+        rc = $?
+        unless rc == 0
+          raise "ssh-keygen return code is #{rc}"
+        end
       end
     rescue => e
       raise Puppet::ParseError, "ssh_keygen(): Unable to generate ssh key (#{e})"
